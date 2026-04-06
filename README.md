@@ -1,75 +1,119 @@
-# React + TypeScript + Vite
+# Finance Tracker React
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend-приложение финансового трекера на `React + TypeScript + Vite`. Проект предназначен для учета пользовательских транзакций и взаимодействия с backend API.
 
-Currently, two official plugins are available:
+На текущем этапе в репозитории реализована базовая UI-часть с модальным окном регистрации пользователя и отправкой данных на сервер.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Возможности
 
-## React Compiler
+- регистрация пользователя через форму в модальном окне;
+- валидация полей `username`, `email`, `password` на клиенте;
+- отправка данных на backend через `fetch`;
+- отображение состояний загрузки, успеха и ошибки;
+- UI на `Tailwind CSS v4`.
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+## Технологии
 
-Note: This will impact Vite dev & build performances.
+- `React 19`
+- `TypeScript`
+- `Vite`
+- `Tailwind CSS 4`
+- `clsx`
+- `tailwind-merge`
+- `ESLint`
 
-## Expanding the ESLint configuration
+## Структура проекта
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```text
+finance-tracker-react/
+├── public/               # статические файлы
+├── src/
+│   ├── assets/           # изображения и ассеты
+│   ├── UI/               # UI-компоненты
+│   │   ├── Button.tsx
+│   │   ├── ModalWindow.tsx
+│   │   └── RegisterForm.tsx
+│   ├── App.tsx           # корневой компонент
+│   ├── index.css         # глобальные стили и theme-переменные
+│   └── main.tsx          # точка входа
+├── .env                  # переменные окружения
+├── package.json
+└── vite.config.ts
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Запуск проекта
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 1. Установка зависимостей
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
+
+### 2. Настройка переменных окружения
+
+Создайте файл `.env` в корне проекта и укажите адрес backend API:
+
+```env
+VITE_BACKEND_URL="http://127.0.0.1:8000/api/v1"
+```
+
+### 3. Запуск в режиме разработки
+
+```bash
+npm run dev
+```
+
+После запуска приложение будет доступно по адресу, который покажет `Vite` в терминале.
+
+## Доступные команды
+
+```bash
+npm run dev      # запуск dev-сервера
+npm run build    # production-сборка
+npm run preview  # локальный просмотр production-сборки
+npm run lint     # проверка ESLint
+```
+
+## Как это работает сейчас
+
+Приложение рендерит кнопку открытия модального окна. Внутри модального окна находится форма регистрации, которая:
+
+- собирает имя пользователя, email и пароль;
+- валидирует поля перед отправкой;
+- отправляет `POST`-запрос на `${VITE_BACKEND_URL}/users`;
+- показывает сообщение об успешной регистрации или ошибке.
+
+## Backend API
+
+Для корректной работы формы регистрации нужен backend, принимающий запрос:
+
+```http
+POST /users
+Content-Type: application/json
+```
+
+Пример тела запроса:
+
+```json
+{
+  "user_name": "john_doe",
+  "email": "john@example.com",
+  "password": "secret123"
+}
+```
+
+## Планы развития
+
+Так как проект задуман как финансовый трекер, логичным следующим шагом может быть добавление:
+
+- авторизации пользователя;
+- списка транзакций;
+- создания, редактирования и удаления транзакций;
+- категорий доходов и расходов;
+- аналитики по балансу и истории операций.
+
+## Автор
+
+Проект создан как frontend-часть финансового трекера для учета пользовательских транзакций.
+
+Автор: Перминов Никита Ильич
