@@ -1,12 +1,13 @@
-import RegisterForm from "./UI/RegisterForm.tsx";
-import ModalWindow from "./UI/ModalWindow.tsx";
-import Button from "./UI/Button.tsx";
-import {useState} from "react";
+import RegisterForm from "./UI/RegisterForm.tsx"
+import ModalWindow from "./UI/ModalWindow.tsx"
+import Button from "./UI/Button.tsx"
+import {useState} from "react"
+import LoginForm from "./UI/LoginForm.tsx"
 
 function App() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
   return (
-    <div className=" flex items-center justify-center">
+    <div className=" flex flex-col gap-5 items-center justify-center">
       <Button
         onClick={() => setIsOpen(true)}
         variant={"primary"}>Зарегистрироваться</Button>
@@ -16,6 +17,7 @@ function App() {
       >
         <RegisterForm/>
       </ModalWindow>
+      <LoginForm />
     </div>
   )
 }

@@ -1,5 +1,5 @@
-import {createPortal} from "react-dom";
-import {useEffect} from "react";
+import {createPortal} from "react-dom"
+import {useEffect} from "react"
 
 interface ModalProps {
   isOpen: boolean;
@@ -10,22 +10,22 @@ interface ModalProps {
 
 function ModalWindow({isOpen, onClose, children, className}: ModalProps) {
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen) return
 
     function handleEsc(e: KeyboardEvent) {
       if (e.key === "Escape") {
-        onClose();
+        onClose()
       }
     }
 
-    window.addEventListener("keydown", handleEsc);
+    window.addEventListener("keydown", handleEsc)
 
     return () => {
-      window.removeEventListener("keydown", handleEsc);
-    };
-  }, [isOpen, onClose]);
+      window.removeEventListener("keydown", handleEsc)
+    }
+  }, [isOpen, onClose])
 
-  if (!isOpen) return null;
+  if (!isOpen) return null
 
   return createPortal(
     <div
@@ -47,7 +47,7 @@ function ModalWindow({isOpen, onClose, children, className}: ModalProps) {
       </div>
     </div>,
     document.body
-  );
+  )
 }
 
-export default ModalWindow;
+export default ModalWindow

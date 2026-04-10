@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useState} from "react"
 
 interface RegisterFormProps {
   username: string;
@@ -7,7 +7,7 @@ interface RegisterFormProps {
 }
 
 function RegisterForm() {
-  const API_URL = import.meta.env.VITE_BACKEND_URL;
+  const API_URL = import.meta.env.VITE_BACKEND_URL
   const [formData, setFormData] = useState<RegisterFormProps>({
     username: "",
     email: "",
@@ -23,7 +23,7 @@ function RegisterForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const {name, value} = e.target;
+    const {name, value} = e.target
     setFormData(prev => ({
       ...prev,
       [name]: value
@@ -31,10 +31,10 @@ function RegisterForm() {
   }
 
   function validateEmail(email: string) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim());
+    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())
   }
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.ChangeEvent<HTMLFormElement>) {
     e.preventDefault()
     setError(null)
     setFormErrors({
@@ -45,23 +45,23 @@ function RegisterForm() {
       formData.username.trim()
     ) {
       setFormErrors(prev => ({...prev, username: "Имя пользователя не может быть пустым"}))
-      return;
+      return
     }
 
     if (!formData.email.trim() || !validateEmail(formData.email)) {
       setFormErrors(prev => ({...prev, email: "Заполните Email корректно"}))
-      return;
+      return
     }
 
     if (!formData.password.trim()) {
       setFormErrors(prev => ({...prev, password: "Пароль не может быть пустым"}))
-      return;
+      return
     }
 
     try {
       setSuccess(null)
       setIsLoading(true)
-      const response = await fetch(`${API_URL}/users`, {
+      const response = await fetch(`${API_URL}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -74,18 +74,19 @@ function RegisterForm() {
       })
 
       if (!response.ok) {
-        throw new Error("Ошибка регистрации");
+        setError("Ошибка регистрации")
+        return
       }
 
-      await response.json();
+      await response.json()
       setError(null)
       setSuccess("Регистрация прошла успешно!")
       setFormData({username: "", email: "", password: ""})
     } catch (err) {
       if (err instanceof Error) {
-        setError(err.message);
+        setError(err.message)
       } else {
-        setError("Неизвестная ошибка");
+        setError("Неизвестная ошибка")
       }
     } finally {
       setIsLoading(false)
@@ -182,4 +183,4 @@ function RegisterForm() {
   )
 }
 
-export default RegisterForm;
+export default RegisterForm
