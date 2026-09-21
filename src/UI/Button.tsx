@@ -11,7 +11,7 @@ function Button({variant = "primary", className, children, ...props}: ButtonProp
     <button
       type="button"
       className={twMerge(clsx(
-        "p-3 text-md rounded-xl transition ease-in-out duration-250 cursor-pointer",
+        "min-h-11 px-4 py-3 text-sm font-semibold rounded-xl transition ease-in-out duration-250 cursor-pointer focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-200 disabled:cursor-not-allowed disabled:opacity-60",
         {
           "bg-brand-500 text-white hover:bg-brand-700 disabled:bg-brand-300/50 disabled:cursor-not-allowed":
             variant === "primary",

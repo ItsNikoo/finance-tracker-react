@@ -1,14 +1,23 @@
-export interface User {
-  userId: number;
-  userName: string;
-  email: string;
+export type TransactionType = "income" | "expense"
+
+export type Transaction = {
+  id: number,
+  category_id: number,
+  type: TransactionType,
+  amount: number,
+  "created_at": string
 }
 
-export interface AuthContextType {
-  user: User | null;
-  isLoading: boolean;
-  isAuthenticated: boolean;
-  login: (email: string, password: string) => void;
-  logout: () => Promise<void>;
-  setUser: (user: User | null) => void;
+export type TransactionCreate = {
+  category_id: number,
+  type: TransactionType,
+  amount: number
 }
+export type Category = {
+  id: number,
+  name_en: string,
+  name_ru: string,
+  type: TransactionType,
+}
+
+export type CategoryCreate = Omit<Category, "id">

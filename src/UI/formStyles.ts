@@ -1,0 +1,2 @@
+export const inputClass = "min-w-0 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-500 focus:bg-white focus:ring-4 focus:ring-brand-50 disabled:cursor-not-allowed disabled:opacity-60"
+export const formCardClass = "min-w-0 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-6"
