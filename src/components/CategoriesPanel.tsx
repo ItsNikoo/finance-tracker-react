@@ -1,10 +1,19 @@
 import type {Category} from "../types.ts"
-import DataPanel, {type ListQuery} from "./DataPanel.tsx"
+import DataPanel from "./DataPanel.tsx"
+import {useCategories} from "../hooks/useCategories.ts"
 
-export default function CategoriesPanel({query}: {query: ListQuery<Category>}) {
-  const categories = query.data ?? []
+export default function CategoriesPanel() {
+  const categoriesQuery = useCategories()
+  const categories: Category[] = categoriesQuery.data ?? []
   return (
-    <DataPanel title="Категории" {...query} isEmpty={categories.length === 0} emptyMessage="Категорий пока нет">
+    <DataPanel
+      title="Категории"
+      isEmpty={categories.length === 0}
+      emptyMessage="Категорий пока нет"
+      isLoading={categoriesQuery.isLoading}
+      isError={categoriesQuery.isError}
+      refetch={categoriesQuery.refetch}
+    >
       <ul className="space-y-2">
         {categories.map(category => (
           <li key={category.id} className="flex items-center gap-3 rounded-xl border border-slate-100 bg-slate-50 p-3 transition hover:bg-white">

@@ -1,12 +1,6 @@
 import type {ReactNode} from "react"
 import Button from "../UI/Button.tsx"
 
-export interface ListQuery<T> {
-  data: T[] | undefined,
-  isLoading: boolean,
-  isError: boolean,
-  refetch: () => void,
-}
 interface DataPanelProps {
   title: string,
   isLoading: boolean,
@@ -17,12 +11,22 @@ interface DataPanelProps {
   children: ReactNode,
 }
 
-export default function DataPanel({title, isLoading, isError, isEmpty, emptyMessage, refetch, children}: DataPanelProps) {
+export default function DataPanel({
+                                    title,
+                                    isLoading,
+                                    isError,
+                                    isEmpty,
+                                    emptyMessage,
+                                    refetch,
+                                    children
+                                  }: DataPanelProps) {
   return (
-    <section className="min-w-0 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-6" aria-label={title} aria-busy={isLoading}>
+    <section className="min-w-0 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-6" aria-label={title}
+             aria-busy={isLoading}>
       <div className="mb-5 flex items-center justify-between gap-3">
         <h2 className="text-lg font-semibold">{title}</h2>
-        <Button variant="secondary" className="px-3 py-2 text-sm" onClick={refetch} disabled={isLoading}>Обновить</Button>
+        <Button variant="secondary" className="px-3 py-2 text-sm" onClick={refetch}
+                disabled={isLoading}>Обновить</Button>
       </div>
       {isLoading ? (
         <div role="status" className="space-y-3">
@@ -37,7 +41,8 @@ export default function DataPanel({title, isLoading, isError, isEmpty, emptyMess
           <Button variant="secondary" onClick={refetch}>Повторить</Button>
         </div>
       ) : isEmpty ? (
-        <p className="rounded-xl border border-dashed border-slate-200 px-4 py-10 text-center text-sm text-slate-500">{emptyMessage}</p>
+        <p
+          className="rounded-xl border border-dashed border-slate-200 px-4 py-10 text-center text-sm text-slate-500">{emptyMessage}</p>
       ) : children}
     </section>
   )

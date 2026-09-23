@@ -1,6 +1,9 @@
 import {getCategories} from "../api/categories.ts"
-import {useApiQuery} from "./useApiQuery.ts"
+import {useQuery} from "@tanstack/react-query"
 
 export function useCategories() {
-  return useApiQuery(getCategories)
+  return useQuery({
+    queryKey: ["categories"],
+    queryFn: ({signal}) => getCategories(signal),
+  })
 }
