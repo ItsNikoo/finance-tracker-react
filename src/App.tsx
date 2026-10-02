@@ -2,6 +2,8 @@ import TransactionsPanel from "./components/TransactionsPanel.tsx"
 import CategoriesPanel from "./components/CategoriesPanel.tsx"
 import TransactionForm from "./components/TransactionForm.tsx"
 import CategoryForm from "./components/CategoryForm.tsx"
+import LoginForm from "./components/LoginForm.tsx"
+import RegisterForm from "./components/RegisterForm.tsx"
 
 function App() {
   return (
@@ -13,6 +15,10 @@ function App() {
           <p className="mt-3 max-w-lg text-sm leading-relaxed text-brand-100 sm:text-base">Всё под контролем. Добавляйте
             операции и распределяйте их по категориям.</p>
         </header>
+        <div className="mb-8 grid items-start gap-6 lg:grid-cols-2">
+          <RegisterForm/>
+          <LoginForm/>
+        </div>
         <div className="mb-8 grid items-start gap-6 lg:grid-cols-2">
           <TransactionForm/>
           <CategoryForm/>
