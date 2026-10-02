@@ -1,12 +1,8 @@
+import {clearCsrfToken, ensureCsrfToken} from "./csrf.ts"
+
 const API_URL = import.meta.env.DEV
   ? "/api"
   : (import.meta.env.VITE_API_URL ?? "/api").replace(/\/$/, "")
-
-let csrfToken: string | null = null
-
-export function setCsrfToken(token: string) {
-  csrfToken = token
-}
 
 export class ApiError extends Error {
   status: number
@@ -22,11 +18,17 @@ export async function apiFetch<T>(path: string, options?: RequestInit): Promise<
   const headers = new Headers(options?.headers)
   const csrfHeader = import.meta.env.VITE_CSRF_HEADER || "X-CSRF-Token"
   const method = (options?.method ?? "GET").toUpperCase()
-  if (csrfToken && !["GET", "HEAD", "OPTIONS"].includes(method)) {
-    headers.set(csrfHeader, csrfToken)
+  options?.signal?.throwIfAborted()
+  if (!["GET", "HEAD", "OPTIONS"].includes(method)) {
+    const token = await ensureCsrfToken(() =>
+      apiFetch<{csrf_token: string}>("/users/csrf", {cache: "no-store"})
+    )
+    options?.signal?.throwIfAborted()
+    headers.set(csrfHeader, token)
   }
   const response = await fetch(API_URL + path, {credentials: "include", ...options, headers})
   if (!response.ok) {
+    if (response.status === 401) clearCsrfToken()
     const body: unknown = await response.json().catch(() => null)
     let message = `HTTP error: ${response.status}`
     if (body && typeof body === "object" && "detail" in body) {
