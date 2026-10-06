@@ -1,6 +1,10 @@
 import {getTransactions} from "../api/transactions.ts"
-import {useApiQuery} from "./useApiQuery.ts"
+import {useQuery} from "@tanstack/react-query"
 
 export function useTransactions() {
-  return useApiQuery(getTransactions)
+  return useQuery({
+    queryKey: ["transactions"],
+    queryFn: ({signal}) => getTransactions(signal),
+  })
+
 }
