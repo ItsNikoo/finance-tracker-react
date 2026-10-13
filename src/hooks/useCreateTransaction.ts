@@ -1,5 +1,6 @@
 import {useMutation, useQueryClient} from "@tanstack/react-query"
 import {createTransaction} from "../api/transactions.ts"
+import {useBalanceStore} from "../stores/balanceStore.ts"
 
 export function useCreateTransaction() {
   const queryClient = useQueryClient()
@@ -7,7 +8,8 @@ export function useCreateTransaction() {
   return useMutation({
     mutationFn: createTransaction,
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ["transactions"]})
+      void useBalanceStore.getState().refreshAll()
+      void queryClient.invalidateQueries({queryKey: ["transactions"]})
     },
   })
 }

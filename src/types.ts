@@ -1,9 +1,12 @@
 // Транзакции
 export type TransactionType = "income" | "expense"
+export type PaymentMethod = "cash" | "card" | "transfer"
 
 export type Transaction = {
   id: number,
   category_id: number,
+  payment_method: PaymentMethod,
+  description: string,
   type: TransactionType,
   amount: number,
   "created_at": string
@@ -11,6 +14,8 @@ export type Transaction = {
 
 export type TransactionCreate = {
   category_id: number,
+  payment_method: PaymentMethod,
+  description: string,
   type: TransactionType,
   amount: number
 }

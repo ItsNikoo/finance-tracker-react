@@ -1,5 +1,40 @@
 @import "tailwindcss";
 
+:root {
+    --bottom-navigation-height: 80px;
+}
+
+html {
+    scroll-padding-bottom: calc(var(--bottom-navigation-height) + env(safe-area-inset-bottom, 0px) + 24px);
+}
+
+body {
+    margin: 0;
+    min-width: 320px;
+    background: #f8fafc;
+}
+
+.app-content {
+    padding-top: max(24px, env(safe-area-inset-top, 0px));
+    padding-bottom: calc(var(--bottom-navigation-height) + env(safe-area-inset-bottom, 0px) + 24px);
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+.bottom-navigation {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 40;
+    /*min-height: var(--bottom-navigation-height);*/
+    /*padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));*/
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+    border-top: 1px solid #e2e8f0;
+    background: rgb(255 255 255 / 96%);
+    box-shadow: 0 -4px 24px rgb(15 23 42 / 4%);
+    backdrop-filter: blur(16px);
+}
+
 @theme {
     --color-brand-50: #eef7f3;
     --color-brand-100: #d6ede3;
