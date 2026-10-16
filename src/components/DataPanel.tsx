@@ -1,7 +1,9 @@
 import type {ReactNode} from "react"
 import Button from "../UI/Button.tsx"
+import {twMerge} from "tailwind-merge"
 
 interface DataPanelProps {
+  className?: string,
   title: string,
   isLoading: boolean,
   isError: boolean,
@@ -12,6 +14,7 @@ interface DataPanelProps {
 }
 
 export default function DataPanel({
+                                    className,
                                     title,
                                     isLoading,
                                     isError,
@@ -21,7 +24,7 @@ export default function DataPanel({
                                     children
                                   }: DataPanelProps) {
   return (
-    <section className="min-w-0 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-6" aria-label={title}
+    <section className={twMerge("min-w-0 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-6", className)} aria-label={title}
              aria-busy={isLoading}>
       <div className="mb-5 flex items-center justify-between gap-3">
         <h2 className="text-lg font-semibold">{title}</h2>

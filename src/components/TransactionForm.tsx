@@ -4,7 +4,8 @@ import {useCreateTransaction} from "../hooks/useCreateTransaction.ts"
 import type {PaymentMethod, TransactionType} from "../types.ts"
 import {useCategories} from "../hooks/useCategories.ts"
 import Button from "../UI/Button.tsx"
-import {formCardClass, inputClass} from "../UI/formStyles.ts"
+import {inputClass} from "../UI/formStyles.ts"
+import {getMoscowDateTime, moscowDateTimeToIso} from "../utils/transactionDate.ts"
 
 const paymentMethods: {value: PaymentMethod; label: string}[] = [
   {value: "cash", label: "Наличные"},
@@ -18,6 +19,14 @@ interface TransactionFormProps {
 
 const transactionInputClass = inputClass.replace("text-sm", "text-base")
 
+function openPicker(input: HTMLInputElement) {
+  try {
+    input.showPicker?.()
+  } catch {
+    input.focus()
+  }
+}
+
 export default function TransactionForm({embedded = false}: TransactionFormProps) {
   const categoriesQuery = useCategories()
   const createTransactionMutation = useCreateTransaction()
@@ -27,6 +36,7 @@ export default function TransactionForm({embedded = false}: TransactionFormProps
   const [categoryId, setCategoryId] = useState("")
   const [amount, setAmount] = useState("")
   const [description, setDescription] = useState("")
+  const [occurredAt, setOccurredAt] = useState(() => getMoscowDateTime())
   const [validationError, setValidationError] = useState<string | null>(null)
 
   const categories = (categoriesQuery.data ?? []).filter(
@@ -75,6 +85,12 @@ export default function TransactionForm({embedded = false}: TransactionFormProps
       return
     }
 
+    const occurredAtIso = moscowDateTimeToIso(occurredAt.date, occurredAt.time)
+    if (!occurredAtIso) {
+      setValidationError("Укажите корректную дату и время операции по Москве")
+      return
+    }
+
     createTransactionMutation.mutate(
       {
         category_id: category.id,
@@ -82,11 +98,13 @@ export default function TransactionForm({embedded = false}: TransactionFormProps
         amount: numericAmount,
         payment_method: paymentMethod,
         description: description.trim(),
+        occurred_at: occurredAtIso,
       },
       {
         onSuccess: () => {
           setAmount("")
           setDescription("")
+          setOccurredAt(getMoscowDateTime())
         },
       }
     )
@@ -94,7 +112,7 @@ export default function TransactionForm({embedded = false}: TransactionFormProps
 
   return (
     <section
-      className={embedded ? "min-w-0" : formCardClass}
+      className="min-w-0"
       aria-labelledby="transaction-form-title"
     >
       <div className="mb-6">
@@ -205,6 +223,38 @@ export default function TransactionForm({embedded = false}: TransactionFormProps
                 }}
               />
             </label>
+          </div>
+
+          <div className="grid min-w-0 gap-4">
+              <label className="flex min-w-0 flex-col gap-2 text-sm font-medium">
+                Дата операции
+                <input
+                  className={transactionInputClass}
+                  type="date"
+                  onClick={event => openPicker(event.currentTarget)}
+                  required
+                  value={occurredAt.date}
+                  onChange={event => {
+                    setOccurredAt(previous => ({...previous, date: event.target.value}))
+                    clearMessages()
+                  }}
+                />
+              </label>
+              <label className="flex min-w-0 flex-col gap-2 text-sm font-medium">
+                Время операции (МСК)
+                <input
+                  className={transactionInputClass}
+                  type="time"
+                  onClick={event => openPicker(event.currentTarget)}
+                  step={1}
+                  required
+                  value={occurredAt.time}
+                  onChange={event => {
+                    setOccurredAt(previous => ({...previous, time: event.target.value}))
+                    clearMessages()
+                  }}
+                />
+              </label>
           </div>
 
           {/* Описание на всю ширину */}

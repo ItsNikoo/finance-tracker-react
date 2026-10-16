@@ -1,4 +1,5 @@
-import {cardTitleClass, monthlyCardClass, monthlyValueClass} from "./cardStyles.ts"
+import {twMerge} from "tailwind-merge"
+import {cardTitleClass, monthlyCardClass, monthlyCardColors, monthlyValueClass} from "./cardStyles.ts"
 
 type MonthlyStatsCardProps = {
   type: "income" | "expenses"
@@ -17,18 +18,19 @@ export default function MonthlyStatsCard({
                                            value,
                                          }: MonthlyStatsCardProps) {
   const title = type === "income" ? "Доходы" : "Расходы"
+  const colors = monthlyCardColors[type]
 
   return (
     <section
-      className={`${monthlyCardClass} border-brand-500/70`}
+      className={`${monthlyCardClass} ${colors.frame}`}
       aria-label={title}
     >
-      <p className={cardTitleClass}>
+      <p className={twMerge(cardTitleClass, colors.text)}>
         {title}
       </p>
 
       <div className={monthlyValueClass}>
-        <p className="w-full wrap-anywhere text-2xl leading-8 font-bold tabular-nums">
+        <p className={`w-full wrap-anywhere text-2xl leading-8 font-bold tabular-nums ${colors.text}`}>
           {moneyFormatter.format(value)}
         </p>
       </div>

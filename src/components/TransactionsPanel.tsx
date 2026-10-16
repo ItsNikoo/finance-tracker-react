@@ -1,24 +1,19 @@
+import TransactionRow from "./TransactionRow.tsx"
 import type {Category, Transaction} from "../types.ts"
 import DataPanel from "./DataPanel.tsx"
 import {useTransactions} from "../hooks/useTransactions.ts"
 import {useCategories} from "../hooks/useCategories.ts"
-
-const amountFormatter = new Intl.NumberFormat("ru-RU", {maximumFractionDigits: 2})
-const dateFormatter = new Intl.DateTimeFormat("ru-RU")
-
-function formatDate(value: string) {
-  const date = new Date(value)
-  return Number.isNaN(date.getTime()) ? "Дата не указана" : dateFormatter.format(date)
-}
+import {sortTransactionsNewestFirst} from "../utils/transactionDate.ts"
 
 export default function TransactionsPanel() {
   const transactionsQuery = useTransactions()
   const categoriesQuery = useCategories()
-  const transactions: Transaction[] = transactionsQuery.data ?? []
+  const transactions: Transaction[] = sortTransactionsNewestFirst(transactionsQuery.data ?? [])
   const categories: Category[] = categoriesQuery.data ?? []
   return (
     <DataPanel
       title="Транзакции"
+      className="rounded-[30px] border-brand-200/80 shadow-[0_8px_30px_rgba(30,50,20,0.05)]"
       isEmpty={transactions.length === 0}
       emptyMessage="Транзакций пока нет"
       isLoading={transactionsQuery.isLoading}
@@ -26,24 +21,16 @@ export default function TransactionsPanel() {
       refetch={transactionsQuery.refetch}
     >
       <ul className="divide-y divide-slate-100">
-        {transactions.map(transaction => (
-          <li key={transaction.id} className="flex flex-wrap items-center justify-between gap-3 py-4">
-            <div className="min-w-0">
-              <p className="wrap-break-word font-medium">
-                {categories.find(c => c.id === transaction.category_id)?.name_ru
-                  || categories.find(c => c.id === transaction.category_id)?.name_en
-                  || `Категория #${transaction.category_id}`}
-              </p>
-              <p className="mt-1 text-sm text-slate-500">
-                {formatDate(transaction.created_at)} · {transaction.type === "income" ? "Доход" : "Расход"}
-              </p>
-            </div>
-            <span
-              className={`font-semibold tabular-nums ${transaction.type === "income" ? "text-brand-600" : "text-slate-900"}`}>
-              {transaction.type === "income" ? "+" : "−"}{amountFormatter.format(Math.abs(transaction.amount))}
-            </span>
-          </li>
-        ))}
+        {transactions.map(transaction => {
+          const category = categories.find(item => item.id === transaction.category_id)
+          return (
+            <TransactionRow
+              key={transaction.id}
+              transaction={transaction}
+              categoryName={category?.name_ru || category?.name_en || `Категория #${transaction.category_id}`}
+            />
+          )
+        })}
       </ul>
     </DataPanel>
   )

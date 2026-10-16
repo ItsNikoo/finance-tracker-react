@@ -15,6 +15,10 @@ export function createTransaction(data: TransactionCreate) {
   })
 }
 
+export function deleteTransaction(id: number) {
+  return apiFetch<void>(`/transactions/${id}`, {method: "DELETE"})
+}
+
 
 export function getBalance(month?: number, year?: number, signal?: AbortSignal) {
   const params = new URLSearchParams()

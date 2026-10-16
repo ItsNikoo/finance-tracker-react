@@ -9,6 +9,7 @@ export type Transaction = {
   description: string,
   type: TransactionType,
   amount: number,
+  occurred_at?: string | null,
   "created_at": string
 }
 
@@ -17,7 +18,8 @@ export type TransactionCreate = {
   payment_method: PaymentMethod,
   description: string,
   type: TransactionType,
-  amount: number
+  amount: number,
+  occurred_at: string,
 }
 
 // Категории
